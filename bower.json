@@ -1,0 +1,24 @@
+{
+  "name": "dialogues-client",
+  "version": "0.0.1",
+  "homepage": "https://github.com/outcoldman/dialogues-client",
+  "authors": [
+    "Denis Gladkikh <outcoldman@gmail.com>"
+  ],
+  "description": "Client scripts for dialogues",
+  "main": "build/dlgs.js",
+  "keywords": [
+    "dialogues"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "almond": "~0.2.7"
+  }
+}
