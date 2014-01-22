@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Project Dialogues</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/github.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.2.9/marked.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/highlight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"></script>
+    <style>
+      .dlgs {
+        width: 80%;
+        padding: 10px 20px;
+        margin: 0 auto;
+      }
+
+      .dlgs-list {
+        list-style: none;
+        padding: 0;
+      }
+
+        .dlgs-list .dlgs-comment {
+          width: 100%;
+          min-height: 100px;
+          margin-bottom: 20px;
+        }
+
+        .dlgs-list .dlgs-comment:last-child {
+          margin-bottom: 0px;
+        }
+
+          .dlgs-list .dlgs-comment img.dlgs-participant-avatar {
+            border-radius: 50%;
+            float: left;
+          }
+
+          .dlgs-list .dlgs-comment .dlgs-comment-header {
+            margin-left: 100px;
+            margin-bottom: 10px;
+          }
+
+
+          .dlgs-list .dlgs-comment .dlgs-comment-header a.dlgs-participant-name {
+            font-size:large;
+          }
+
+          .dlgs-list .dlgs-comment .dlgs-comment-header a.dlgs-participant-name[disabled] {
+            color: #555;
+          }
+
+          .dlgs-list .dlgs-comment .dlgs-comment-header a.dlgs-participant-name[disabled]:hover {
+            text-decoration: none;
+          }
+
+          .dlgs-list .dlgs-comment .dlgs-comment-header a.dlgs-comment-link {
+            color: black;
+            opacity: .5;
+            font-size: small;
+          }
+
+          .dlgs-list .dlgs-comment .dlgs-comment-header a.dlgs-comment-link:hover {
+            text-decoration: none;
+          }
+
+          .dlgs-list .dlgs-comment .dlgs-comment-header a.dlgs-comment-link:before {
+            content: "·";
+            margin-right: 5px;
+            margin-left: 5px;
+          }
+
+          .dlgs-list .dlgs-comment .dlgs-comment-body {
+            border-bottom: 1px dashed #dbdbdb;
+            padding: 5px 10px 20px 10px;
+            margin-left: 100px;
+          }
+
+          .dlgs .dlgs-form {
+            margin-top: 20px;
+          }
+
+          .dlgs .dlgs-form div.dlgs-comment-preview{
+            border: 1px dashed #dbdbdb;
+            padding: 10px 10px 10px 10px;
+            margin: 5px 0px 10px 0px;
+          }
+
+          .dlgs .dlgs-form div.dlgs-comment-preview:empty {
+            display: none;
+          }
+
+          .dlgs-form .form-actions {
+              margin: 0 0 0 0;
+              background-color: transparent;
+              text-align: right;
+          }
+
+        #example1 .dlgs-list {
+          max-height: 300px;
+          overflow: auto;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+      <article>
+
+
+<h1 id="project-dialogues">Project Dialogues</h1>
+<p>Hi there, I'm Den (<a href="http://outcoldman.com">outcoldman</a>) and this is project Dialogues (my first node.js project!). Do you like <a href="http://disqus.com/">Disqus</a>? I do. It gives you very simple way to add support of commentaries on your website or blog. But it is too restricted, it does not allow you to change it in a way as you want it (I want to use <a href="http://daringfireball.net/projects/markdown/">markdown</a>!). So this is why I decided to create project Dialogues. </p>
+<p>Example below, all the information after example, also you can take a look on examples on jsfiddle: with customizations <a href="http://jsfiddle.net/Wh5q7/4/">http://jsfiddle.net/Wh5q7/4/</a> and minimal usage <a href="http://jsfiddle.net/K5D4c/">http://jsfiddle.net/K5D4c/</a>, which uses current server for storing commentaries (take a look how easy is to integrate it!).</p>
+
+<h3>Example</h3>
+
+<div id="example1" class="dlgs" ></div>
+
+<h2 id="what-is-the-project-dialogues">What is the Project Dialogues?</h2>
+<p>This is how I see it:</p>
+<ol>
+<li>Node.js server for handling commentaries.</li>
+<li>Client library for communicating with server and rendering commentaries.</li>
+<li>Management system for Dialogues (unspam/delete/etc for administrators).</li>
+<li>At the end I'd like to make it as service in cloud with bunch of customizations and different themes (especially if I will get one of the prizes - I think this will be a good way of using free cloud services). </li>
+</ol>
+<p>This means that at the end you will have a choice to have your own server with project Dialogues or use service.</p>
+<p>I did not have plans to build parts 3 and 4 in time of <a href="http://nodeknockout.com/">Node.js Knockout</a> hackathon. But a lot of features for 1 and 2 already implemented.</p>
+<h3 id="server-side-features">Server side features</h3>
+<ul>
+<li>Support different storages: mongodb, files and in-memory storages. The last one is useful only for development. And of course you can write your own storage.</li>
+<li>Supports different <code>processors</code> which will be invoked before saving commentary to db (useful for checking commentaries for spam) and before sending to client (useful for setting gravatar icon). </li>
+</ul>
+<h3 id="client-side-features">Client side features</h3>
+<ul>
+<li>You can renders commentaries anywhere on page (take a look on <a href="http://jsfiddle.net/Wh5q7/4/">http://jsfiddle.net/Wh5q7/4/</a>).</li>
+<li>Each block of commentaries has identity with <code>host</code> and <code>id</code>, you can specify your own identities or script will use <code>document.location.host</code> and <code>document.location.path</code> for them.</li>
+<li>By default all commentaries will be rendered as plain text, but it is easy to change (examples on this page and on jsfiddle use markdown).</li>
+<li>I use <a href="http://socket.io/">socket.io</a> for instance commentary updates (just try to open this page in two tabs and try to add commentary on one of them).</li>
+<li>Right now user information is stored in cookie per domain (so you will not need to re-enter it after you will come back on this page).</li>
+<li>I use <code>localStorage</code> for backing up your commentaries, so if your browser crashes or you accidentally close browser - don't worry, just open page and continue to write commentary.</li>
+<li>You can render as many commentary blocks on your page as you want (so if you use tabs or you write SPA - you can do it very easy).</li>
+<li>Client side supports a lot of different customizations, you can overwrite templates, behaviors and CSS classes (documentation is coming).</li>
+<li>As you saw in first example on this page - it supports scrolling (example on the bottom does not have scrolls).</li>
+<li>Delay loading. Commentaries will not be loaded until user will not scroll to them. Second block with commentaries below uses delay loading.</li>
+<li>It uses gravatar for avatars (server side actually generates gravatar links, because we don't want to send sensitive information to client).</li>
+<li>Form supports instance preview (the same rendering engine, which you use for rendering commentaries).</li>
+</ul>
+<h3 id="todos">TODOs</h3>
+<p>And of course I have a lot of plans for future:</p>
+<ul>
+<li>Add <em>edit tokens</em>, so users will have a chance to edit their commentaries after posing them.</li>
+<li>Add support for oath. </li>
+<li>Implement notification module, which will send emails with updates.</li>
+<li>Implement administrative portal for commentaries.</li>
+<li>Publish npm module (I don't want to do it right now, because a lot of things are going to be changed in next month, so I want first to get stable API and after this publish npm module).</li>
+<li>Loading by pages.</li>
+<li>Themes, themes, themes.</li>
+</ul>
+<h3 id="thank-you-oss">Thank you OSS!</h3>
+<ul>
+<li>npm install <a href="https://github.com/mongodb/node-mongodb-native">mongodb</a> - requirement only if you need mongodb as a storage.</li>
+<li>npm install <a href="https://github.com/emerleite/node-gravatar">gravatar</a></li>
+<li>npm install <a href="http://underscorejs.org/">underscore</a></li>
+<li>npm install <a href="file:///Users/dgladkikh/dev/github/nko4/socket.io">socket.io</a> - if you want to support sockets.</li>
+<li>npm install <a href="https://github.com/caolan/async">async</a></li>
+<li>npm install <a href="https://npmjs.org/package/akismet-api">akismet-api</a> - it is not enabled on this server, but akismet set-processor is implemented and ready to use.</li>
+<li>script src="<a href="http://jquery.com">jquery</a>" - client library has dependency on it.</li>
+<li>script src="<a href="file:///Users/dgladkikh/dev/github/nko4/socket.io">socket.io</a>" - not a requirement, if you will not include it - this just means no instant updates.</li>
+<li>script src="<a href="http://momentjs.com/">momentjs</a>" - not a requirement, only if you want to format dates in human readably format as I don on this page.</li>
+<li>script src="<a href="https://github.com/chjj/marked">marked</a>" - not a requirement, only if you want to use markdown for rendering commentaries.</li>
+<li>script src="<a href="http://highlightjs.org/">highlight</a>" - not a requirement, only if want to use nice highlight for code.</li>
+<li>script src="<a href="http://getbootstrap.com/">bootstrap</a>" - at current moment this library kind of depends on bootstrap, if you will not include it - you will need to write your own classes. But this is will be changed in future.</li>
+</ul>
+</article>
+
+<h3>Commentaries</h3>
+
+<div id="example2" class="dlgs" ></div>
+
+  </body>
+
+<script>
+(function(){'use strict';
+
+  var customDateFormatter = function(date) {
+    return moment(date).fromNow();
+  };
+
+  var markdownBodyFormatter = function(text) {
+    return marked(text);
+  };
+
+  marked.setOptions({
+    highlight: function (code, lang) {
+      try {
+        if (code) {
+          return hljs.highlight(lang, code, false).value;
+        }
+      } catch (e) {
+        console.error(e);
+        return hljs.highlightAuto(code).value;
+      }
+    },
+    sanitize: true
+  });
+
+  require(['./dialogues'], function(Dialogues) {
+    console.log(Dialogues);
+
+    Dialogues.render({
+      $el: '#example2',
+      id: 'example_2',
+      debug: true,
+      load: {
+        delay: true
+      },
+      dateFormatter: customDateFormatter,
+      bodyFormatter: markdownBodyFormatter
+    });
+
+    Dialogues.render({
+      $el: '#example1',
+      id: 'example_1',
+      debug: true,
+      load: {
+        delay: false
+      },
+      dateFormatter: customDateFormatter,
+      bodyFormatter: markdownBodyFormatter
+    });
+  });
+})();
+</script>
+
+</html>
