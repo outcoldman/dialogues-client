@@ -2,7 +2,6 @@ var http = require('http'),
     fs = require('fs'),
     path = require('path'),
     url = require('url'),
-    socket = require('socket.io')
     dialogues = require('dialogues')({
       storage: {
         type: 'memory', // 'mongodb'
@@ -22,7 +21,7 @@ var http = require('http'),
       // ]
     });
 
-var port = 8010;
+var port = 8000;
 
 function staticResourceHandler(responce, resource, contentType) {
   var pagePath = path.join(__dirname, resource);
@@ -59,9 +58,4 @@ app = http.createServer(function (req, res) {
   }
 
   console.log('Server running at http://0.0.0.0:' + port + '/');
-});
-
-io = socket.listen(app);
-io.of('/api/dialogues/').on('connection', function (socket) {
-  dialogues.socketHandler(socket);
 });
