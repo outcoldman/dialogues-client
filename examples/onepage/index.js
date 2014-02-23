@@ -2,26 +2,9 @@ var http = require('http'),
     fs = require('fs'),
     path = require('path'),
     url = require('url'),
-    dialogues = require('dialogues')({
-      storage: {
-        type: 'memory', // 'mongodb'
-        options: {
-          path: path.join(__dirname, '.dialogues/storage') // for file storage 
-        }
-      }
-      // , // Example how to enable akismet anti-spam module 
-      // 'set-processors': [
-      //   { 
-      //     type: 'akismet', 
-      //     options: {
-      //       blog: 'http://outcold.2013.nodeknockout.com/',
-      //       key: 'X'
-      //     } 
-      //   }
-      // ]
-    });
+    Dialogues = require('dialogues');
 
-var port = 8000;
+var port = 8010;
 
 function staticResourceHandler(responce, resource, contentType) {
   var pagePath = path.join(__dirname, resource);
@@ -33,11 +16,30 @@ function staticResourceHandler(responce, resource, contentType) {
   fs.createReadStream(pagePath).pipe(responce);
 }
 
+var dialogues = new Dialogues({
+    storage: {
+      type: 'memory', // 'mongodb'
+      options: {
+        path: path.join(__dirname, '.dialogues/storage') // for file storage 
+      }
+    }
+    // , // Example how to enable akismet anti-spam module 
+    // 'set-processors': [
+    //   { 
+    //     type: 'akismet', 
+    //     options: {
+    //       blog: 'http://outcold.2013.nodeknockout.com/',
+    //       key: 'X'
+    //     } 
+    //   }
+    // ]
+  });
+
 app = http.createServer(function (req, res) {
   console.log('Handling request: ' + req.url);
 
-  if (url.parse(req.url).pathname === '/api/dialogues/') {
-    dialogues.httpHandler(req, res);
+  if (url.parse(req.url).pathname.indexOf('/api/dialogues/') === 0) {
+    dialogues.handleRequest(req, res);
   } else if (req.url.indexOf('.js') > 0) {
     staticResourceHandler(res, './../../lib/' + req.url, 'text/javascript');
   } else if (req.url === '/' || req.url.indexOf('.html') >= 0) {
