@@ -17,12 +17,24 @@ function staticResourceHandler(responce, resource, contentType) {
 }
 
 var dialogues = new Dialogues({
-    storage: {
-      type: 'memory', // 'mongodb'
-      options: {
-        path: path.join(__dirname, '.dialogues/storage') // for file storage 
+    comments: {
+      storage: {
+        type: 'memory'
+      },
+      middleware: {
+        'out+*': [
+          { type: 'unspam' },
+          { type: 'gravatar' },
+          { type: 'sensitive' },
+          { type: 'clear' }
+        ],
+        'in+POST': [
+          { type: 'clear' },
+          { type: 'init' }
+        ]
       }
     }
+    
     // , // Example how to enable akismet anti-spam module 
     // 'set-processors': [
     //   { 
@@ -39,7 +51,7 @@ app = http.createServer(function (req, res) {
   console.log('Handling request: ' + req.url);
 
   if (url.parse(req.url).pathname.indexOf('/api/dialogues/') === 0) {
-    dialogues.handleRequest(req, res);
+    dialogues.handleRequest(req, res, url.parse(req.url).pathname.substring('/api/dialogues/'.length));
   } else if (req.url.indexOf('.js') > 0) {
     staticResourceHandler(res, './../../lib/' + req.url, 'text/javascript');
   } else if (req.url === '/' || req.url.indexOf('.html') >= 0) {
